@@ -1,5 +1,6 @@
 defmodule NuPM.Package do
-  use Ecto.Schema
+  use NuPM.Schema
+  import Ecto.Changeset
 
   schema "packages" do
     field :title, :string
@@ -11,5 +12,22 @@ defmodule NuPM.Package do
     field :license, :string
 
     has_many :versions, NuPM.Version
+    
+    timestamps()
+  end
+
+  def changeset(package, params \\ %{}) do
+    package
+    |> cast(params, [
+      :title,
+      :description,
+      :repository,
+      :website,
+      :author,
+      :author_email,
+      :license
+    ])
+    |> validate_required([:title])
+    |> unique_constraint(:title)
   end
 end
