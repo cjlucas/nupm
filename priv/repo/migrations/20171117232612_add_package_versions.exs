@@ -4,7 +4,7 @@ defmodule NuPM.Repo.Migrations.AddPackageVersions do
   def change do
     create table(:packages) do
       add :title, :string
-      add :description, :string
+      add :description, :text
       add :repository, :string
       add :website, :string
       add :author, :string
@@ -16,7 +16,7 @@ defmodule NuPM.Repo.Migrations.AddPackageVersions do
 
 		create table(:versions) do
 			add :number, :string
-			add :readme, :string
+			add :readme, :text
 
 			add :package_id, references(:packages)
 
