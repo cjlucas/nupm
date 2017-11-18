@@ -16,4 +16,6 @@ config :nupm, NuPM.Repo,
   password: "postgres",
   database: "nupm_test",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  migration_primary_key: [id: :uuid, type: :binary_id],
+	migration_timestamps: [type: :utc_datetime]
