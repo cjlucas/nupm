@@ -12,6 +12,7 @@ defmodule NuPM.Version do
     field :license, :string
     field :metafile, :string
     field :readme, :string
+    field :upload_path, :string
 
     belongs_to :package, NuPM.Package, primary_key: true
 
@@ -29,8 +30,10 @@ defmodule NuPM.Version do
       :license,
       :number,
       :readme,
-      :package_id])
-    |> validate_required([:number, :package_id])
+      :package_id,
+      :upload_path,
+    ])
+    |> validate_required([:number, :package_id, :upload_path])
     |> assoc_constraint(:package)
     |> foreign_key_constraint(:package_id)
     |> unique_constraint(:pkey, name: :versions_number_package_id_index)
@@ -38,7 +41,7 @@ defmodule NuPM.Version do
 
   def from_package_json(package_json) when is_map(package_json) do
     %{
-      number: package_json["version"],
+      number: version(package_json),
       description: package_json["description"],
       website: package_json["homepage"],
       author: author_name(package_json),
@@ -47,14 +50,17 @@ defmodule NuPM.Version do
     }
   end
 
-  def author_name(metadata) do
+  defp version(%{"version" => version}) when is_binary(version), do: version
+  defp version(_), do: "0.0.0"
+
+  defp author_name(metadata) do
     case metadata["author"] do
       %{"name" => name} -> name
       name -> name
     end
   end
 
-  def author_email(metadata) do
+  defp author_email(metadata) do
     case metadata["author"] do
       %{"email" => email} -> email
       _ -> nil
