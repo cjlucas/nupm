@@ -8,12 +8,8 @@ defmodule NuPM.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Start the Ecto repository
       supervisor(NuPM.Repo, []),
-      # Start the endpoint when the application starts
       supervisor(NuPMWeb.Endpoint, []),
-      # Start your own worker by calling: NuPM.Worker.start_link(arg1, arg2, arg3)
-      # worker(NuPM.Worker, [arg1, arg2, arg3]),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
