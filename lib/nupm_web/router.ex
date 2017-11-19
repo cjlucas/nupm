@@ -13,6 +13,10 @@ defmodule NuPMWeb.Router do
     get "/packages", PackageController, :index
     get "/packages/:name", PackageController, :show
     get "/packages/:name/:version", VersionController, :show
+
+    post "/users", UserController, :create
+
+    post "/sessions", SessionController, :create
   end
 
   get "/downloads/:name/:version", FileController, :download

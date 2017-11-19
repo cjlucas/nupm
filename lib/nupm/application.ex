@@ -10,6 +10,7 @@ defmodule NuPM.Application do
     children = [
       supervisor(NuPM.Repo, []),
       supervisor(NuPMWeb.Endpoint, []),
+      worker(NuPM.Auth.Server, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
