@@ -1,6 +1,8 @@
 defmodule NuPMWeb.Router do
   use NuPMWeb, :router
 
+  alias NuPMWeb.FileController
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -12,4 +14,7 @@ defmodule NuPMWeb.Router do
     get "/packages/:name", PackageController, :show
     get "/packages/:name/:version", VersionController, :show
   end
+
+  get "/downloads/:name/:version", FileController, :download
+  post "/upload", FileController, :upload
 end

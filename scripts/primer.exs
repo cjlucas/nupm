@@ -1,5 +1,5 @@
 defmodule Primer do
-  alias NuPM.{Repo, Package, Version}
+  alias NuPM.{Repo, Package, Version, Archive}
 
   @root_packages [
     "express",
@@ -15,6 +15,8 @@ defmodule Primer do
     "yarn"
   ]
 
+  @package_path Application.get_env(:nupm, :package_path)
+
   def prime(npm_cache_dir) do
     Enum.each(@root_packages, &prime_with_package(npm_cache_dir, MapSet.new, &1))
   end
@@ -23,14 +25,14 @@ defmodule Primer do
     Path.join([npm_cache_dir, package_name, "*", "package.tgz"])
     |> Path.wildcard
     |> Enum.each(fn fpath ->
-      with {:ok, package_path}      <- extract_archive(fpath),
-           {:ok, package_json_path} <- find_package_file(package_path, "package.json"),
+      with {:ok, package_path}      <- Archive.extract(fpath),
+           {:ok, package_json_path} <- Archive.find_file(package_path, "package.json"),
            {:ok, package_json}      <- File.read(package_json_path),
            {:ok, metadata}          <- Poison.decode(package_json),
            {:ok, package}           <- create_or_get_package(package_name) do
 
         readme =
-          case find_package_file(package_path, "[Rr][Ee][Aa][Dd][Mm][Ee].[Mm][Dd]") do
+          case Archive.find_file(package_path, "[Rr][Ee][Aa][Dd][Mm][Ee].[Mm][Dd]") do
             {:ok, readme_path} ->
               case File.read(readme_path) do
                 {:ok, data} -> data
@@ -45,8 +47,15 @@ defmodule Primer do
           |> Map.put(:package_id, package.id)
           |> Map.put(:readme, readme)
 
-        Version.changeset(%Version{}, params)
+        upload_path = Path.join(package.title, params[:number] <> ".tar.gz")
+
+        Version.changeset(%Version{}, Map.put(params, :upload_path, upload_path))
         |> Repo.insert
+
+        outpath = Path.join(@package_path, upload_path)
+        Path.dirname(outpath) |> File.mkdir_p!
+
+        File.cp!(fpath, outpath)
 
         File.rm_rf!(package_path)
 
@@ -80,20 +89,6 @@ defmodule Primer do
         :error
       files ->
         {:ok, List.first(files)}
-    end
-  end
-
-  def extract_archive(archive_path) do
-    tmp = Path.join(System.tmp_dir!, "primer_tmp")
-    File.rm_rf!(tmp)
-    File.mkdir!(tmp)
-
-    case System.cmd("tar", ["xf", archive_path, "-C", tmp]) do
-      {_, 0} ->
-        {:ok, tmp}
-      _ ->
-        File.rm_rf!(tmp)
-        :error
     end
   end
 end

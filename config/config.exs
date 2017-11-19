@@ -9,7 +9,8 @@ use Mix.Config
 config :nupm,
   namespace: NuPM,
   ecto_repos: [NuPM.Repo],
-  generators: [binary_id: true]
+  generators: [binary_id: true],
+  package_path: "./packages"
 
 # Configures the endpoint
 config :nupm, NuPMWeb.Endpoint,
