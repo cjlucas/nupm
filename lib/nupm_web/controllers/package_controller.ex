@@ -11,6 +11,7 @@ defmodule NuPMWeb.PackageController do
     embedded_schema do
       field :limit, :integer
       field :order, :string
+      field :after, :string
     end
 
     def changeset(params \\ %{}) do
@@ -20,12 +21,12 @@ defmodule NuPMWeb.PackageController do
         |> Map.put_new("order", "inserted_at")
 
       %__MODULE__{}
-      |> cast(params, [:limit, :order])
+      |> cast(params, [:limit, :order, :after])
     end
   end
 
   def index(conn, params) do
-    params = IndexParams.changeset.changes
+    params = IndexParams.changeset(params).changes
 
     order = String.to_existing_atom(params[:order])
 
@@ -34,9 +35,35 @@ defmodule NuPMWeb.PackageController do
       limit: ^params[:limit],
       order_by: [desc: ^order]
 
+    query =
+      if Map.has_key?(params, :after) do
+        case decode_cursor(params[:after]) do
+          {:ok, {_, value}} ->
+            query |> where([p], field(p, ^order) < ^value)
+          {:error, _} ->
+            send_resp(conn, 500, "")
+        end
+      else
+        query
+      end
+
     packages = Repo.all(query)
+
+    next_url =
+      unless Enum.empty?(packages) do
+        cursor = encode_cursor(order, List.last(packages) |> Map.get(order))
+        next_params =
+          params
+          |> Enum.into(%{})
+          |> Map.put(:after, cursor)
+
+        url_with_params(conn, next_params)
+      end
+
+
     info = %{
-      cursor: encode_cursor(order, List.last(packages) |> Map.get(order))
+      item_count: Repo.one(from p in Package, select: count(p.id)),
+      next_url: next_url,
     }
 
     render conn, "page.json", packages: packages, page_info: info
@@ -78,5 +105,17 @@ defmodule NuPMWeb.PackageController do
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  defp url_with_params(conn, params) do
+    uri = %URI{
+      scheme: Atom.to_string(conn.scheme),
+      host: conn.host,
+      port: conn.port,
+      path: conn.request_path,
+      query: URI.encode_query(params)
+    }
+
+    URI.to_string(uri)
   end
 end
