@@ -13,7 +13,7 @@ defmodule NuPM.Repo.Migrations.AddPackageVersions do
 		create table(:versions) do
 			add :number, :string
       add :metafile, :text
-			add :readme, :text
+      add :readme, :text
       add :description, :text
       add :repository, :string
       add :website, :string
