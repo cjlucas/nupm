@@ -62,7 +62,7 @@ defmodule NuPMWeb.PackageController do
 
 
     info = %{
-      item_count: Repo.one(from p in Package, select: count(p.id)),
+      total_results: Repo.one(from p in Package, select: count(p.id)),
       next_url: next_url,
     }
 

@@ -19,7 +19,7 @@ defmodule NuPMWeb.PackageControllerTest do
       assert package["title"] == "foobar"
 
       assert Map.has_key?(resp, "page_info")
-      assert get_in(resp, ["page_info", "item_count"]) == 1
+      assert get_in(resp, ["page_info", "total_results"]) == 1
       refute is_nil(get_in(resp, ["page_info", "next_url"]))
     end
   end
