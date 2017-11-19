@@ -43,4 +43,6 @@ config :nupm, NuPM.Repo,
   password: "postgres",
   database: "nupm_dev",
   hostname: "localhost",
-  pool_size: 10
+  pool_size: 10,
+  migration_primary_key: [id: :uuid, type: :binary_id],
+	migration_timestamps: [type: :utc_datetime]
