@@ -7,5 +7,9 @@ defmodule NuPMWeb.Router do
 
   scope "/api", NuPMWeb do
     pipe_through :api
+
+    get "/packages", PackageController, :index
+    get "/packages/:name", PackageController, :show
+    get "/packages/:name/:version", VersionController, :show
   end
 end
