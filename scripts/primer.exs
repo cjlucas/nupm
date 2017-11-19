@@ -40,8 +40,6 @@ defmodule Primer do
               nil
           end
 
-        IO.puts inspect metadata
-
         params =
           Version.from_package_json(metadata)
           |> Map.put(:package_id, package.id)
@@ -77,7 +75,6 @@ defmodule Primer do
   Find a file matching the given pattern somewhere in the given package_path.
   """
   defp find_package_file(package_path, pattern) do
-    IO.puts "FIND FILE #{pattern}"
     case Path.join([package_path, "**", pattern]) |> Path.wildcard do
       [] ->
         :error
