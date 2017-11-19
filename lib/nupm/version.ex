@@ -35,4 +35,29 @@ defmodule NuPM.Version do
     |> foreign_key_constraint(:package_id)
     |> unique_constraint(:pkey, name: :versions_number_package_id_index)
   end
+
+  def from_package_json(package_json) when is_map(package_json) do
+    %{
+      number: package_json["version"],
+      description: package_json["description"],
+      website: package_json["homepage"],
+      author: author_name(package_json),
+      author_email: author_email(package_json),
+      license: package_json["license"],
+    }
+  end
+
+  def author_name(metadata) do
+    case metadata["author"] do
+      %{"name" => name} -> name
+      name -> name
+    end
+  end
+
+  def author_email(metadata) do
+    case metadata["author"] do
+      %{"email" => email} -> email
+      _ -> nil
+    end
+  end
 end
