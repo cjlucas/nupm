@@ -7,16 +7,23 @@ defmodule NuPMWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_auth do
+    plug NuPMWeb.APIAuth
+  end
+
   scope "/api", NuPMWeb do
     pipe_through :api
 
-    get "/packages", PackageController, :index
-    get "/packages/:name", PackageController, :show
-    get "/packages/:name/:version", VersionController, :show
-
     post "/users", UserController, :create
-
     post "/sessions", SessionController, :create
+
+    scope "/" do
+      pipe_through :api_auth
+
+      get "/packages", PackageController, :index
+      get "/packages/:name", PackageController, :show
+      get "/packages/:name/:version", VersionController, :show
+    end
   end
 
   get "/downloads/:name/:version", FileController, :download
