@@ -26,7 +26,6 @@ class Router extends React.Component {
   }
 
   render() {
-    console.log('OMGHEREEE');
     const { loginState } = this.props;
 
     if (loginState.token) {

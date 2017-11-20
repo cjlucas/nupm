@@ -10,7 +10,6 @@ function recentPackages(state = [], action) {
 
 function loginState(state = {}, action) {
   if (action.type === 'LOGIN_SUCCEEDED') {
-    console.log("DUDE HERE", action);
     return {
       token: action.token,
     };

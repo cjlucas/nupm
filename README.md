@@ -123,15 +123,15 @@ Response Body:
 	},
 	"data": [
 		{
-            "versions": [
-                "0.5.1"
-            ],
+            		"versions": [
+                		"0.5.1"
+            		],
 			"updated_at": "2017-11-19T20:29:07.175034",
 			"title": "mkdirp",
 			"inserted_at": "2017-11-19T20:29:07.175027",
 			"id": "5caa7d86-425a-4a20-8f7e-5e79b9a0aff1"
 		},
-        {...}
+        	{...}
     ]
 }
 ```
