@@ -147,7 +147,7 @@ Example:
 `http://localhost:4001/api/packages/lodash`
 
 Response Body:
-`
+```
 {
 	"versions": [
 		"3.10.1",
@@ -161,7 +161,7 @@ Response Body:
 	"inserted_at": "2017-11-19T19:06:53.521847",
 	"id": "3ab5d7a6-4847-4ea9-a076-bda73910b538"
 }
-`
+```
 
 #### `GET /api/packages/<name>/<version>`
 
