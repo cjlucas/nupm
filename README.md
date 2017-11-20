@@ -17,7 +17,7 @@ by the server.
 
 ### Requirements
 
-The system utilizes a Postgres database as it's only external requirement.
+The system utilizes a Postgres database as its only external requirement. (And Elixir, of course.)
 
 ### To Launch
 
