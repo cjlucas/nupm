@@ -251,3 +251,7 @@ for whatever reason, any existing sessions would be forgotten. As Elixir/Erlang
 systems should be designed to recover from faults gracefully, a persistent
 storage option such as DETS should be used.
 
+Uploaded packages are currently stored locally in a configuration-specified
+directory. In a production system, it would be better to store these on an
+external storage service such as S3 that can provide redundancy as well as offload
+traffic from the core API servers.
