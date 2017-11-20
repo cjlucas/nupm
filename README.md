@@ -2,7 +2,18 @@
 
 A Javascript package manager similar to NPM.
 
-## Instructions
+## Client Instructions
+
+```
+$ cd client
+$ yarn install
+$ webpack
+```
+
+The generated html/js/css files will be placed in client/dist and be served
+by the server.
+
+## Server Instructions
 
 ### Requirements
 
