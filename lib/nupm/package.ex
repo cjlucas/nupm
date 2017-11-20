@@ -21,4 +21,12 @@ defmodule NuPM.Package do
     |> validate_required([:title])
     |> unique_constraint(:title)
   end
+
+  @spec latest_version(Package.t) :: Version.t | nil
+  def latest_version(package) do
+    package.versions
+    |> Enum.sort_by(&(&1.inserted_at))
+    |> Enum.reverse
+    |> List.first
+  end
 end
