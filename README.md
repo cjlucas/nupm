@@ -144,7 +144,7 @@ detail and the user can simply call the URL provided at `page_info.next_url`.
 Get info about a package.
 
 Example:
-`http://localhost:4001/api/packages/lodash`
+`http://home.cjlucas.net:4001/api/packages/lodash`
 
 Response Body:
 ```
@@ -170,7 +170,7 @@ Get info about a specific version of a package.
 **NOTE**: `latest` can be used as a psuedo version for convencience.
 
 Example:
-`http://localhost:4001/api/packages/lodash/1.0.2`
+`http://home.cjlucas.net:4001/api/packages/lodash/1.0.2`
 
 Response Body:
 ```
