@@ -206,7 +206,7 @@ Upload a package.
 **NOTE:** This endpoint requires a .tar.gz archive containing a valid javascript
 project (the package must contain a package.json).
 
-The server expects an HTML form where archive is specified under the `key` field.
+The server expects an HTML form where archive is specified under the `file` field.
 
 ## Thoughts and Reflections
 
@@ -234,4 +234,20 @@ feature by adding a `Repo.EventManager` GenServer that would allow other process
 to subscribe to events such as a "package created" or "user deleted". I would
 then have a event listener process that would update the tree whenever a
 package is created in the repo.
+
+
+### Areas to Improve
+
+Overall, I'm pleased with how the server turned out, but a few things can
+be improved.
+
+Testing and documentation can be improved dramatically. Elixir provides excellent
+tooling in these areas with ExDoc and ExUnit and I've found them invaluable in the
+past.
+
+Currently, the authentication server (`NuPM.Auth.Server`) is simply a process
+that manages an ETS table without any redundancy, meaning if the process crashes
+for whatever reason, any existing sessions would be forgotten. As Elixir/Erlang
+systems should be designed to recover from faults gracefully, a persistent
+storage option such as DETS should be used.
 
